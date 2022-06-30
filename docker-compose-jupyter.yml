@@ -1,0 +1,22 @@
+# https://docs.docker.com/compose/install/
+# Build: docker-compose build
+# Run jupyter lab in foreground: docker-compose -f docker-compose-jupyter.yml up
+# Alternative: docker-compose -f docker-compose-jupyter.yml run --rm --service-ports tolokaml
+# Run jupyter lab in background: docker-compose -f docker-compose-jupyter.yml up -d
+
+version: "3"
+services:
+  tolokaml:
+    build: .
+    image: toloka-ml
+    ports:
+      - 8892:8892
+    working_dir: '/opt/project'
+    command: bash -c "pip3 install jupyterlab && jupyter-lab --port=8892 --allow-root --no-browser --ip='*' --NotebookApp.token='' --NotebookApp.password=''"
+    volumes:
+      - '.:/opt/project:rw'
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [ gpu ]

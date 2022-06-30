@@ -1,0 +1,39 @@
+program: run_annotator_model.py
+method: bayes
+metric:
+  name: val_acc/dataloader_idx_0
+  goal: maximize
+early_terminate:
+  type: hyperband
+  min_iter: 20*50000/128 # 20 epochs * 50k samples / 128 batch size
+parameters:
+  lr:
+    distribution: log_uniform_values
+    min: 0.00001
+    max: 0.003
+  dropout:
+    values: [0.1, 0.2, 0.5]
+  label_smoothing:
+    values: [0, 0.1, 0.2]
+  fixmatch_coef:
+    values: [0, 0.1, 0.3, 0.5, 0.8, 1]
+  fixmatch_threshold:
+    values: [0.6, 0.8, 0.9]
+  fixmatch_softmax_t:
+    values: [ 0.5, 1, 1.5 ]
+  backbone_name:
+    value: efficientnet_b1_pruned
+  mlflow:
+    value: true
+  wandb:
+    value: true
+  n_epoch:
+    value: 100
+  gpus:
+    value: -1
+
+
+command:
+  - python
+  - ${program}
+  - ${args}

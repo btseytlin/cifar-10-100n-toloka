@@ -1,0 +1,23 @@
+# https://docs.docker.com/compose/install/
+# Build: docker-compose build
+# Run interactive bash: docker-compose run --rm tolokaml
+# Run interactive python shell: docker-compose run --rm tolokaml python3
+
+version: "3"
+services:
+  tolokaml:
+    build:
+      context: .
+    shm_size: '8gb'
+    image: toloka-ml
+    ports:
+      - 8889:8889
+    command: 'bash'
+    working_dir: '/opt/project'
+    volumes:
+      - '.:/opt/project:rw'
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [ gpu ]

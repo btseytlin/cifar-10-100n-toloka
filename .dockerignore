@@ -1,0 +1,3 @@
+lightning_logs/*
+*.pkl
+data/cifar10_data/*
